@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn, signInWithOAuth } from '../actions'
+import { signIn, signInWithOAuth, signInAsDemo } from '../actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
@@ -43,6 +43,15 @@ export default function LoginPage() {
                             Google
                         </Button>
                     </div>
+                    <Button
+                        variant="secondary"
+                        className="w-full bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200"
+                        onClick={handleDemoLogin}
+                        disabled={isLoading}
+                    >
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        Try Demo Account
+                    </Button>
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t" />

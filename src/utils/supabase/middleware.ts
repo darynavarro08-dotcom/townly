@@ -32,12 +32,23 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    // Protect dashboard routes
-    if (
-        !user &&
-        request.nextUrl.pathname.startsWith('/(dashboard)')
-    ) {
-        // no-op, real protection happens in middleware.ts usually
+    // Protect dashboard and onboarding routes
+    const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') ||
+        request.nextUrl.pathname.startsWith('/onboarding') ||
+        request.nextUrl.pathname.startsWith('/announcements') ||
+        request.nextUrl.pathname.startsWith('/dues') ||
+        request.nextUrl.pathname.startsWith('/events') ||
+        request.nextUrl.pathname.startsWith('/polls') ||
+        request.nextUrl.pathname.startsWith('/directory') ||
+        request.nextUrl.pathname.startsWith('/documents');
+
+    if (!user && isProtectedRoute) {
+        return NextResponse.redirect(new URL('/auth/login', request.url))
+    }
+
+    // Redirect logged in users away from auth pages if they try to access them
+    if (user && (request.nextUrl.pathname.startsWith('/auth/login') || request.nextUrl.pathname.startsWith('/auth/signup'))) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
     }
 
     return supabaseResponse
