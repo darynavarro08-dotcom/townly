@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, documents } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -8,10 +8,11 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 async function getAuthUser() {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Unauthorized");
 
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) throw new Error("No community found");
 
     return dbUser;

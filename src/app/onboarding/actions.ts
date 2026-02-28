@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { communities, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -11,11 +11,12 @@ function generateJoinCode() {
 }
 
 export async function createCommunity(formData: FormData) {
-    const { userId } = await auth();
-    const user = await currentUser();
-    if (!userId || !user) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Unauthorized");
 
     const name = formData.get("name") as string;
+    const address = formData.get("address") as string; // New field
     if (!name) throw new Error("Community name is required");
 
     // Create community
@@ -26,22 +27,24 @@ export async function createCommunity(formData: FormData) {
     }).returning();
 
     // Upsert user as admin
-    const primaryEmail = user.emailAddresses[0]?.emailAddress || "no-email@example.com";
-    const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || primaryEmail;
+    const primaryEmail = user.email || "no-email@example.com";
+    const fullName = (user.user_metadata?.full_name || user.user_metadata?.name || "Community Member") as string;
 
     await db.insert(users).values({
-        clerkId: userId,
-        communityId: newCommunity.id,
-        role: "admin",
+        supabaseId: user.id,
         name: fullName,
         email: primaryEmail,
+        role: "admin",
+        communityId: newCommunity.id,
+        address: address,
     }).onConflictDoUpdate({
-        target: users.clerkId,
+        target: users.supabaseId,
         set: {
             communityId: newCommunity.id,
             role: "admin",
             name: fullName,
             email: primaryEmail,
+            address: address,
         }
     });
 
@@ -49,9 +52,9 @@ export async function createCommunity(formData: FormData) {
 }
 
 export async function joinCommunity(formData: FormData) {
-    const { userId } = await auth();
-    const user = await currentUser();
-    if (!userId || !user) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Unauthorized");
 
     const code = formData.get("code") as string;
     if (!code) throw new Error("Join code is required");
@@ -61,17 +64,17 @@ export async function joinCommunity(formData: FormData) {
     if (!community) throw new Error("Invalid join code");
 
     // Upsert user as member
-    const primaryEmail = user.emailAddresses[0]?.emailAddress || "no-email@example.com";
-    const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || primaryEmail;
+    const primaryEmail = user.email || "no-email@example.com";
+    const fullName = (user.user_metadata?.full_name || user.user_metadata?.name || "Community Member") as string;
 
     await db.insert(users).values({
-        clerkId: userId,
-        communityId: community.id,
-        role: "member",
+        supabaseId: user.id,
         name: fullName,
         email: primaryEmail,
+        role: "member",
+        communityId: community.id,
     }).onConflictDoUpdate({
-        target: users.clerkId,
+        target: users.supabaseId,
         set: {
             communityId: community.id,
             role: "member",

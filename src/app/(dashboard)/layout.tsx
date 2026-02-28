@@ -1,19 +1,22 @@
 export const dynamic = "force-dynamic";
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, communities } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { Building, LayoutDashboard, Megaphone, Vote, Coins, FileText, Calendar, Users } from "lucide-react";
+import { Building, LayoutDashboard, Megaphone, Vote, Coins, FileText, Calendar, Users, LogOut } from "lucide-react";
+import { signOut } from "@/app/auth/actions";
+import { Button } from "@/components/ui/button";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-    const { userId } = await auth();
-    if (!userId) redirect("/sign-in");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) redirect("/auth/login");
 
     //this is the database thing
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) {
         redirect("/onboarding");
     }
@@ -58,14 +61,22 @@ export default async function DashboardLayout({ children }: { children: React.Re
                         </Link>
                     ))}
                 </div>
-                <div className="h-16 border-t flex items-center px-6 justify-between">
-                    <div className="flex items-center gap-3">
-                        <UserButton afterSignOutUrl="/" />
-                        <div className="flex flex-col">
-                            <span className="text-sm font-medium truncate w-32">{dbUser.name}</span>
+                <div className="h-20 border-t flex flex-col p-4 justify-center">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                            {dbUser.name[0]}
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="text-sm font-medium truncate">{dbUser.name}</span>
                             <span className="text-xs text-slate-500 capitalize">{dbUser.role}</span>
                         </div>
                     </div>
+                    <form action={signOut}>
+                        <button type="submit" className="flex items-center gap-2 text-xs text-slate-500 hover:text-red-600 transition-colors">
+                            <LogOut className="h-3 w-3" />
+                            Sign Out
+                        </button>
+                    </form>
                 </div>
             </aside>
 

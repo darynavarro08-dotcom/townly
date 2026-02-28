@@ -1,21 +1,22 @@
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
-import { users, communities, announcements, polls, events } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { users, announcements, communities, polls, payments, events } from "@/db/schema";
+import { eq, desc, count, sql } from "drizzle-orm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Megaphone, Vote, Coins, Calendar, PlusCircle } from "lucide-react";
+import { Megaphone, Vote, Coins, Calendar, ArrowRight, CheckCircle2, Clock, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-    const { userId } = await auth();
-    if (!userId) redirect("/sign-in");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
 
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) redirect("/onboarding");
 
-    
+
     const [latestAnnouncements, activePolls, upcomingEvents] = await Promise.all([
         db.select().from(announcements)
             .where(eq(announcements.communityId, dbUser.communityId))
@@ -24,7 +25,7 @@ export default async function DashboardPage() {
         db.select().from(polls)
             .where(eq(polls.communityId, dbUser.communityId))
             .orderBy(desc(polls.createdAt))
-            .limit(3), 
+            .limit(3),
         db.select().from(events)
             .where(eq(events.communityId, dbUser.communityId))
             .orderBy(desc(events.startsAt))

@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, announcements } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
@@ -10,10 +10,11 @@ import { PlusCircle, Megaphone, Trash2 } from "lucide-react";
 import { deleteAnnouncement } from "./actions";
 
 export default async function AnnouncementsPage() {
-    const { userId } = await auth();
-    if (!userId) redirect("/sign-in");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
 
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) redirect("/onboarding");
 
     // Fetch announcements with author details

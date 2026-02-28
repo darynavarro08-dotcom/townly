@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, communities, payments } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Coins, CheckCircle2, AlertCircle } from "lucide-react";
+import { Coins, CheckCircle2, Clock, AlertCircle, ExternalLink } from "lucide-react";
+import { format } from "date-fns";
 import { createCheckoutSession, updateCommunityDues, markUserPaid } from "./actions";
 
 export default async function DuesPage() {
-    const { userId } = await auth();
-    if (!userId) redirect("/sign-in");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
 
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) redirect("/onboarding");
 
     const [community] = await db.select().from(communities).where(eq(communities.id, dbUser.communityId)).limit(1);
@@ -44,7 +46,7 @@ export default async function DuesPage() {
             <div className="grid md:grid-cols-2 gap-6 items-start">
                 {/* Member Status Card */}
                 <Card className={dbUser.duesPaid ? "border-emerald-200" : "border-red-200"}>
-                    <div className={`h-2 w-full absolute top-0 left-0 ${dbUser.duesPaid ? "bg-emerald-500" : "bg-red-500"}`} />
+                    <div className={`h - 2 w - full absolute top - 0 left - 0 ${dbUser.duesPaid ? "bg-emerald-500" : "bg-red-500"} `} />
                     <CardHeader className="pt-8">
                         <CardTitle>Your Dues Status</CardTitle>
                         <CardDescription>

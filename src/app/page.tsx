@@ -18,11 +18,11 @@ export default function LandingPage() {
             Pricing
           </Link>
           <div className="h-4 w-px bg-slate-200 hidden sm:block" />
-          <Link href="/sign-in" className="text-sm font-medium hover:underline underline-offset-4">
+          <Link href="/auth/login" className="text-sm font-medium hover:underline underline-offset-4">
             Log in
           </Link>
           <Button asChild>
-            <Link href="/sign-up">Get Started</Link>
+            <Link href="/auth/signup">Get Started</Link>
           </Button>
         </nav>
       </header>
@@ -42,7 +42,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
                 <Button size="lg" className="h-12 px-8" asChild>
-                  <Link href="/sign-up">
+                  <Link href="/auth/signup">
                     Create your community <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>

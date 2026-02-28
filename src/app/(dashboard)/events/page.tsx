@@ -1,22 +1,24 @@
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, events, rsvps } from "@/db/schema";
-import { eq, desc, inArray } from "drizzle-orm";
+import { eq, desc, inArray, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { PlusCircle, Calendar as CalendarIcon, MapPin, Clock } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, Calendar, MapPin, Clock, Users } from "lucide-react";
 import { RsvpButtons } from "./rsvp-buttons";
+import { format } from "date-fns";
 
 export default async function EventsPage() {
-    const { userId } = await auth();
-    if (!userId) redirect("/sign-in");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
 
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) redirect("/onboarding");
 
-    
+
     const allEvents = await db.select()
         .from(events)
         .where(eq(events.communityId, dbUser.communityId))
@@ -49,7 +51,7 @@ export default async function EventsPage() {
 
                 {dbUser.role === "admin" && (
                     <Button asChild>
-                        <Link href="/events/new"><PlusCircle className="mr-2 h-4 w-4" /> Create Event</Link>
+                        <Link href="/events/new"><Plus className="mr-2 h-4 w-4" /> Create Event</Link>
                     </Button>
                 )}
             </div>
@@ -58,7 +60,7 @@ export default async function EventsPage() {
                 {allEvents.length === 0 ? (
                     <div className="md:col-span-3 text-center py-16 px-4 bg-white border border-dashed rounded-lg">
                         <div className="mx-auto w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-4 text-slate-400">
-                            <CalendarIcon className="h-6 w-6" />
+                            <Calendar className="h-6 w-6" />
                         </div>
                         <h3 className="text-lg font-medium text-slate-900 mb-1">No upcoming events</h3>
                         <p className="text-slate-500 max-w-sm mx-auto">

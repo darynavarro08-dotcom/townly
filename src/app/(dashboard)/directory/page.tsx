@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq, or, and } from "drizzle-orm";
@@ -10,10 +10,11 @@ import { Users, Mail, Phone, MapPin, EyeOff } from "lucide-react";
 import { updateProfileSettings } from "./actions";
 
 export default async function DirectoryPage() {
-    const { userId } = await auth();
-    if (!userId) redirect("/sign-in");
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect("/auth/login");
 
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1);
+    const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) redirect("/onboarding");
 
     // Admins see everyone. Members see only opted-in users (plus themselves).
