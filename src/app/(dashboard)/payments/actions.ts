@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, communities, payments, communityMembers } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { getPlanAccess } from "@/utils/planAccess";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { headers, cookies } from "next/headers";
@@ -84,6 +85,9 @@ export async function updateCommunityDues(formData: FormData) {
     const user = await getAuthUser();
     if (user.role !== "admin") throw new Error("Only admins can update dues");
 
+    const planAccess = await getPlanAccess();
+    if (!planAccess?.canManageDues) throw new Error("Your plan does not support managing dues");
+
     const amountStr = formData.get("amount") as string;
     const period = formData.get("period") as string;
 
@@ -103,6 +107,9 @@ export async function markUserPaid(userIdToMark: number, isPaid: boolean) {
     const user = await getAuthUser();
     if (user.role !== "admin") throw new Error("Only admins can manually mark users as paid");
 
+    const planAccess = await getPlanAccess();
+    if (!planAccess?.canManageDues) throw new Error("Your plan does not support managing dues");
+
     // Validate user belongs to community via community_members
     const [targetMembership] = await db
         .select()
@@ -116,9 +123,12 @@ export async function markUserPaid(userIdToMark: number, isPaid: boolean) {
         throw new Error("Invalid user");
     }
 
-    await db.update(users)
+    await db.update(communityMembers)
         .set({ duesPaid: isPaid })
-        .where(eq(users.id, userIdToMark));
+        .where(and(
+            eq(communityMembers.userId, userIdToMark),
+            eq(communityMembers.communityId, user.communityId!)
+        ));
 
     if (isPaid) {
         // Record manual payment

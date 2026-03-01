@@ -16,12 +16,12 @@ export default function NewAnnouncementPage() {
     async function handleSubmit(formData: FormData) {
         setIsLoading(true);
         try {
-            await createAnnouncement(formData);
-        } catch (e: any) {
-            // Next.js redirect throws an error, we MUST re-throw it!
-            if (e.message === 'NEXT_REDIRECT') {
-                throw e;
+            const res = await createAnnouncement(formData);
+            if (res && res.success) {
+                toast.success("Announcement posted!");
+                window.location.href = "/announcements"; // Use window.location for a full refresh or router.push
             }
+        } catch (e: any) {
             toast.error(e.message || "Failed to post announcement");
             setIsLoading(false);
         }
