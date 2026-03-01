@@ -29,11 +29,11 @@ export default async function LandingPage() {
 
           {user ? (
             <Button asChild className="bg-blue-600 hover:bg-blue-700">
-              <Link href="/home">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </Button>
           ) : (
             <>
-              <Link href="/sign-in" className="text-sm font-medium hover:underline underline-offset-4 text-slate-700 hover:text-blue-600 transition-colors">
+              <Link href="/auth/login" className="text-sm font-medium hover:underline underline-offset-4 text-slate-700 hover:text-blue-600 transition-colors">
                 Log in
               </Link>
               <Button asChild className="bg-blue-600 hover:bg-blue-700">

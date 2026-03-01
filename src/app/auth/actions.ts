@@ -58,7 +58,7 @@ export async function signIn(formData: FormData) {
     }
 
     revalidatePath('/', 'layout')
-    return redirect('/home')
+    return redirect('/dashboard')
 }
 
 export async function signInAsDemo() {
@@ -74,24 +74,20 @@ export async function signInAsDemo() {
     const demoEmail = 'demo@example.com'
 
     try {
-        console.log('--- DEMO SIGN IN ---')
         let demoCommunity = (await db.select().from(communities).where(eq(communities.name, 'Demo Community')).limit(1))[0]
 
         if (!demoCommunity) {
-            console.log('Demo Community not found, creating it...')
             try {
                 const [created] = await db.insert(communities).values({
                     name: 'Demo Community',
                     joinCode: 'DEMO12',
                 }).returning()
                 demoCommunity = created
-                console.log('Created Demo Community:', demoCommunity.id)
             } catch (insertError) {
                 console.error('Failed to create Demo Community:', insertError)
                 // Fallback: try to just get the first community available if name based lookup fails
                 const [fallback] = await db.select().from(communities).limit(1)
                 if (fallback) {
-                    console.log('Using fallback community:', fallback.name)
                     demoCommunity = fallback
                 } else {
                     return { error: 'Could not find or create a demo community. Please run npx npm run seed first.' }
@@ -114,7 +110,7 @@ export async function signInAsDemo() {
         })
 
         revalidatePath('/', 'layout')
-        return redirect('/home')
+        return redirect('/dashboard')
     } catch (error: any) {
         if (error.digest?.startsWith('NEXT_REDIRECT')) throw error
         return { error: error.message || 'Failed to sign in as demo' }

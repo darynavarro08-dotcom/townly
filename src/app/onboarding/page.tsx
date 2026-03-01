@@ -331,7 +331,7 @@ export default function OnboardingPage() {
                                     </Button>
                                 </div>
 
-                                <Button size="lg" className="w-full h-14 text-base shadow-lg shadow-blue-200" onClick={() => router.push('/home')}>
+                                <Button size="lg" className="w-full h-14 text-base shadow-lg shadow-blue-200" onClick={() => router.push('/dashboard')}>
                                     Go to your community <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </CardContent>

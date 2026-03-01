@@ -11,7 +11,7 @@ import { MessageSquare } from "lucide-react";
 export default async function MessagesPage() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/sign-in");
+    if (!user) redirect("/auth/login");
 
     const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser) redirect("/onboarding");

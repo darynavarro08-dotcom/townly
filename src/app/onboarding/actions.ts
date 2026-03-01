@@ -125,11 +125,11 @@ export async function joinCommunity(formData: FormData) {
             type: 'welcome',
             title: `Welcome to ${community.name}!`,
             body: `You're now a member. Check out the community rules in the Document Vault, vote on any open polls, and introduce yourself in the directory.`,
-            href: '/home',
+            href: '/dashboard',
         });
     }
 
-    redirect("/home");
+    redirect("/dashboard");
 }
 
 export async function searchCommunities(query: string) {
@@ -203,9 +203,9 @@ export async function joinCommunityById(communityId: number) {
             type: 'welcome',
             title: `Welcome to ${community.name}!`,
             body: `You're now a member. Check out the community rules in the Document Vault, vote on any open polls, and introduce yourself in the directory.`,
-            href: '/home',
+            href: '/dashboard',
         });
     }
 
-    redirect("/home");
+    redirect("/dashboard");
 }
