@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Building, LayoutDashboard, Megaphone, Vote, Coins, FileText, Calendar, Users, LogOut, Settings, Menu, ChevronDown, Check, ClipboardList, Briefcase, Search } from "lucide-react";
+import { Building, LayoutDashboard, Megaphone, Vote, Coins, FileText, Calendar, Users, LogOut, Settings, Menu, ChevronDown, Check, ClipboardList, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -19,7 +19,6 @@ const allNavItems = [
     { name: "Events", href: "/events", icon: Calendar },
     { name: "Directory", href: "/directory", icon: Users },
     { name: "Issues", href: "/issues", icon: ClipboardList },
-    { name: "Explore Communities", href: "/communities", icon: Search },
 ];
 
 type Membership = {
