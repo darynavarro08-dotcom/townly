@@ -35,7 +35,7 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    const isProtectedRoute = request.nextUrl.pathname.startsWith('/home') ||
+    const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') ||
         request.nextUrl.pathname.startsWith('/onboarding') ||
         request.nextUrl.pathname.startsWith('/announcements') ||
         request.nextUrl.pathname.startsWith('/payments') ||
@@ -50,12 +50,14 @@ export async function updateSession(request: NextRequest) {
         request.nextUrl.pathname.startsWith('/settings') ||
         request.nextUrl.pathname.startsWith('/documents');
 
-    if (!user && isProtectedRoute) {
-        return NextResponse.redirect(new URL('/sign-in', request.url))
+    const isDemoMode = request.cookies.get('quormet_demo_mode')?.value === 'true';
+
+    if (!user && !isDemoMode && isProtectedRoute) {
+        return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
-    if (user && (request.nextUrl.pathname.startsWith('/sign-in') || request.nextUrl.pathname.startsWith('/sign-up'))) {
-        return NextResponse.redirect(new URL('/home', request.url))
+    if (user && (request.nextUrl.pathname.startsWith('/auth/login') || request.nextUrl.pathname.startsWith('/sign-up'))) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
     }
 
     return supabaseResponse

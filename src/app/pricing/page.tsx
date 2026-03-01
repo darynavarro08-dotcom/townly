@@ -15,7 +15,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex gap-4">
                     <Button variant="ghost" asChild>
-                        <Link href="/sign-in">Log in</Link>
+                        <Link href="/auth/login">Log in</Link>
                     </Button>
                     <Button asChild>
                         <Link href="/sign-up">Get Started</Link>

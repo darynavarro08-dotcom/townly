@@ -12,7 +12,7 @@ import { setActiveCommunity } from "@/utils/setCommunity";
 import { getTerms } from "@/utils/communityTerms";
 
 const allNavItems = [
-    { name: "Overview", href: "/home", icon: LayoutDashboard },
+    { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "Announcements", href: "/announcements", icon: Megaphone },
     { name: "Voting & Polls", href: "/polls", icon: Vote },
     { name: "Dues & Payments", href: "/payments", icon: Coins },

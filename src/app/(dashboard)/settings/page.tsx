@@ -21,7 +21,7 @@ const PLAN_LABELS: Record<string, { label: string; color: string }> = {
 export default async function SettingsPage() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/sign-in");
+    if (!user) redirect("/auth/login");
 
     const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId || dbUser.role !== "admin") {

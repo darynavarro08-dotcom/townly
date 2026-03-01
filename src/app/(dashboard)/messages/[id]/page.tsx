@@ -13,7 +13,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ id: str
     const { id } = await params;
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect("/sign-in");
+    if (!user) redirect("/auth/login");
 
     const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser) redirect("/onboarding");

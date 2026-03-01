@@ -9,15 +9,30 @@ import { db } from "@/db";
 import { users, communities, communityMembers, polls, votes, issues } from "@/db/schema";
 import { eq, inArray, and, gt, isNull, or } from "drizzle-orm";
 import { signOut } from "@/app/auth/actions";
+import { cookies } from "next/headers";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
 import AssistantPanel from "@/components/assistant/AssistantPanel";
 import { getPlanAccess } from "@/utils/planAccess";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const cookieStore = await cookies();
+    let user = (await supabase.auth.getUser()).data.user;
+    const isDemoMode = cookieStore.get('quormet_demo_mode')?.value === 'true';
 
-    if (!user) redirect("/sign-in");
+    if (!user && isDemoMode) {
+        // Mock user for demo mode
+        user = {
+            id: 'demo-user-id',
+            email: 'demo@example.com',
+            user_metadata: { full_name: 'Demo User' },
+            app_metadata: {},
+            aud: 'authenticated',
+            created_at: new Date().toISOString(),
+        } as any;
+    }
+
+    if (!user) redirect("/auth/login");
 
     const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
 
@@ -29,8 +44,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         if (!dbUser?.communityId) redirect("/onboarding");
     }
 
-    const { cookies } = await import("next/headers");
-    const cookieStore = await cookies();
+
     const activeCookieVal = cookieStore.get("quormet_active_community")?.value;
     const activeCommunityId = activeCookieVal
         ? parseInt(activeCookieVal)
