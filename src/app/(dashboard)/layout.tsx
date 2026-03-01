@@ -16,7 +16,7 @@ import { getPlanAccess } from "@/utils/planAccess";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
     const supabase = await createClient();
-    let user = (await supabase.auth.getUser()).data.user;
+    const user = (await supabase.auth.getUser()).data.user;
 
     if (!user) redirect("/auth/login");
 
@@ -59,7 +59,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     const planAccess = await getPlanAccess();
 
     // Notification counts for sidebar badges
-    let notifs: Record<string, number> = {};
+    const notifs: Record<string, number> = {};
     if (dbUser && resolvedCommunityId) {
         // Unvoted active polls
         const now = new Date();
