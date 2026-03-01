@@ -37,15 +37,23 @@ export async function createClient() {
         };
 
         return new Proxy(supabase, {
-            get(target: any, prop) {
+            get(target, prop) {
                 if (prop === 'auth') {
-                    return {
-                        ...target.auth,
-                        getUser: async () => ({ data: { user: demoUser }, error: null }),
-                        getSession: async () => ({ data: { session: { user: demoUser } }, error: null }),
-                    };
+                    return new Proxy(target.auth, {
+                        get(authTarget, authProp) {
+                            if (authProp === 'getUser') {
+                                return async () => ({ data: { user: demoUser }, error: null });
+                            }
+                            if (authProp === 'getSession') {
+                                return async () => ({ data: { session: { user: demoUser } }, error: null });
+                            }
+                            const value = Reflect.get(authTarget, authProp);
+                            return typeof value === 'function' ? value.bind(authTarget) : value;
+                        }
+                    });
                 }
-                return target[prop];
+                const value = Reflect.get(target, prop);
+                return typeof value === 'function' ? value.bind(target) : value;
             }
         });
     }
