@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { users, messages, communityMembers } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
@@ -14,7 +15,13 @@ export default async function MessagesPage() {
     if (!user) redirect("/auth/login");
 
     const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
-    if (!dbUser || !dbUser.communityId) redirect("/onboarding");
+    if (!dbUser) redirect("/onboarding");
+
+    // Resolve active community from cookie
+    const cookieStore = await cookies();
+    const activeCookieVal = cookieStore.get("quormet_active_community")?.value;
+    const communityId = activeCookieVal ? parseInt(activeCookieVal) : dbUser.communityId;
+    if (!communityId) redirect("/onboarding");
 
     // remove old messages first
     await purgeOldMessages();
@@ -26,10 +33,10 @@ export default async function MessagesPage() {
         senderName: users.name,
         createdAt: messages.createdAt,
     })
-    .from(messages)
-    .leftJoin(users, eq(users.id, messages.senderId))
-    .where(and(eq(messages.recipientId, dbUser.id), eq(messages.communityId, dbUser.communityId)))
-    .orderBy(desc(messages.createdAt));
+        .from(messages)
+        .leftJoin(users, eq(users.id, messages.senderId))
+        .where(and(eq(messages.recipientId, dbUser.id), eq(messages.communityId, communityId)))
+        .orderBy(desc(messages.createdAt));
 
     const sent = await db.select({
         id: messages.id,
@@ -38,10 +45,10 @@ export default async function MessagesPage() {
         recipientName: users.name,
         createdAt: messages.createdAt,
     })
-    .from(messages)
-    .leftJoin(users, eq(users.id, messages.recipientId))
-    .where(and(eq(messages.senderId, dbUser.id), eq(messages.communityId, dbUser.communityId)))
-    .orderBy(desc(messages.createdAt));
+        .from(messages)
+        .leftJoin(users, eq(users.id, messages.recipientId))
+        .where(and(eq(messages.senderId, dbUser.id), eq(messages.communityId, communityId)))
+        .orderBy(desc(messages.createdAt));
 
     return (
         <div className="p-6 md:p-8 max-w-4xl mx-auto w-full space-y-6">

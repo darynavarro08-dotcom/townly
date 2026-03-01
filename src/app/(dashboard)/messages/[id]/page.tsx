@@ -1,14 +1,15 @@
 import { createClient } from "@/utils/supabase/server";
 import { db } from "@/db";
 import { users, messages } from "@/db/schema";
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Trash2, ArrowLeft } from "lucide-react";
 import { deleteMessage } from "../actions";
 
-export default async function MessageDetailPage({ params }: { params: { id: string } }) {
+export default async function MessageDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) redirect("/auth/login");
@@ -16,7 +17,9 @@ export default async function MessageDetailPage({ params }: { params: { id: stri
     const [dbUser] = await db.select().from(users).where(eq(users.supabaseId, user.id)).limit(1);
     if (!dbUser || !dbUser.communityId) redirect("/onboarding");
 
-    const messageId = parseInt(params.id);
+    const messageId = parseInt(id);
+    if (isNaN(messageId)) notFound();
+
     const [msgRow] = await db.select({
         id: messages.id,
         body: messages.body,
@@ -24,8 +27,8 @@ export default async function MessageDetailPage({ params }: { params: { id: stri
         recipientId: messages.recipientId,
         createdAt: messages.createdAt,
     })
-    .from(messages)
-    .where(eq(messages.id, messageId));
+        .from(messages)
+        .where(eq(messages.id, messageId));
 
     if (!msgRow) notFound();
 
@@ -54,7 +57,7 @@ export default async function MessageDetailPage({ params }: { params: { id: stri
                 </div>
                 <div className="border p-4 rounded-lg whitespace-pre-wrap">{msgRow.body}</div>
                 <div className="flex space-x-2">
-                    <form action={async () => { await deleteMessage(messageId); }}>
+                    <form action={async () => { "use server"; await deleteMessage(messageId); }}>
                         <Button size="sm" variant="destructive" type="submit" className="flex items-center">
                             <Trash2 className="h-4 w-4 mr-1" /> Delete
                         </Button>
