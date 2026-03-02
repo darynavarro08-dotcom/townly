@@ -12,7 +12,7 @@ import { setActiveCommunity } from "@/utils/setCommunity";
 import { getTerms } from "@/utils/communityTerms";
 
 const allNavItems = [
-    { name: "Dashboard", href: "/home", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Announcements", href: "/announcements", icon: Megaphone },
     { name: "Voting & Polls", href: "/polls", icon: Vote },
     { name: "Dues & Payments", href: "/payments", icon: Coins },
@@ -182,7 +182,7 @@ export function SidebarNav({
         <>
             {/* Mobile Header & Nav */}
             <div className="md:hidden flex h-14 items-center justify-between px-4 border-b bg-white sticky top-0 z-30">
-                <Link href="/home" className="flex items-center gap-2">
+                <Link href="/dashboard" className="flex items-center gap-2">
                     <Building className="h-5 w-5 text-blue-600" />
                     <span className="font-bold tracking-tight">Quormet</span>
                 </Link>
@@ -217,7 +217,7 @@ export function SidebarNav({
             {/* Desktop Sidebar */}
             <aside className="w-64 border-r bg-white flex-col hidden md:flex shrink-0">
                 <div className="h-16 flex items-center px-6 border-b shrink-0">
-                    <Link href="/home" className="flex items-center gap-2">
+                    <Link href="/dashboard" className="flex items-center gap-2">
                         <Building className="h-6 w-6 text-blue-600" />
                         <span className="font-bold text-lg tracking-tight">Quormet</span>
                     </Link>
