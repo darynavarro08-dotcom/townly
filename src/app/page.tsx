@@ -213,9 +213,6 @@ export default async function LandingPage() {
               Proudly supporting the United Nations Sustainable Development Goals (SDG 11: Sustainable Cities and Communities & SDG 16: Peace, Justice and Strong Institutions).
             </p>
           </div>
-          <p className="text-sm">
-            © {new Date().getFullYear()} Quorify Inc. All rights reserved.
-          </p>
           <div className="flex gap-4">
             <Link href="#" className="text-sm hover:underline hover:text-white transition-colors">Terms of Service</Link>
             <Link href="#" className="text-sm hover:underline hover:text-white transition-colors">Privacy Policy</Link>
