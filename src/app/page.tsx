@@ -1,5 +1,5 @@
 /**
- * The landing page for Quorify, featuring sections for features, pricing, 
+ * The landing page for Townly, featuring sections for features, pricing, 
  * and calls to action for creating or joining a community.
  */
 import Link from "next/link";
@@ -19,7 +19,7 @@ export default async function LandingPage() {
           <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-shadow">
             Q
           </div>
-          <span className="font-bold text-xl tracking-tight">Quorify</span>
+          <span className="font-bold text-xl tracking-tight">Townly</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
           <Link href="#features" className="text-sm font-medium hover:underline underline-offset-4 hidden sm:block text-slate-600 hover:text-slate-900 transition-colors">
@@ -207,7 +207,7 @@ export default async function LandingPage() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <div className="h-6 w-6 rounded bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">Q</div>
-              <span className="font-bold text-xl tracking-tight text-white">Quorify</span>
+              <span className="font-bold text-xl tracking-tight text-white">Townly</span>
             </div>
             <p className="text-xs text-slate-500 max-w-sm mt-2">
               Proudly supporting the United Nations Sustainable Development Goals (SDG 11: Sustainable Cities and Communities & SDG 16: Peace, Justice and Strong Institutions).

@@ -1,9 +1,9 @@
-# Quorify - AI Context & Developer Handbook
+# Townly - AI Context & Developer Handbook
 
-This document provides a comprehensive overview of the Quorify application to assist AI agents in understanding the codebase, architecture, and feature set.
+This document provides a comprehensive overview of the Townly application to assist AI agents in understanding the codebase, architecture, and feature set.
 
 ## Project Vision
-Quorify is an all-in-one community management platform designed for neighborhood associations, HOAs, and community groups. It replaces fragmented email chains with a centralized hub for governance, communication, and operations.
+Townly is an all-in-one community management platform designed for neighborhood associations, HOAs, and community groups. It replaces fragmented email chains with a centralized hub for governance, communication, and operations.
 
 
 ## Technical Stack

@@ -67,7 +67,7 @@ export default function SignupPage() {
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow">
                     Q
                 </div>
-                <span className="font-bold text-2xl tracking-tight">Quorify</span>
+                <span className="font-bold text-2xl tracking-tight">Townly</span>
             </Link>
 
             <Card className="w-full max-w-md relative z-10 shadow-xl border-0 glass-strong rounded-2xl animate-fade-in-up">

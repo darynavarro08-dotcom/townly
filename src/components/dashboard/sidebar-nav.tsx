@@ -175,7 +175,7 @@ export function SidebarNav({
                     <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-500/20">
                         Q
                     </div>
-                    <span className="font-bold tracking-tight">Quorify</span>
+                    <span className="font-bold tracking-tight">Townly</span>
                 </Link>
 
                 <Sheet open={open} onOpenChange={setOpen}>
@@ -212,7 +212,7 @@ export function SidebarNav({
                         <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-shadow">
                             Q
                         </div>
-                        <span className="font-bold text-lg tracking-tight">Quorify</span>
+                        <span className="font-bold text-lg tracking-tight">Townly</span>
                     </Link>
                 </div>
 

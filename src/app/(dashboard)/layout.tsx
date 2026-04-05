@@ -31,7 +31,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     }
 
     const cookieStore = await cookies();
-    const activeCookieVal = cookieStore.get("quorify_active_community")?.value;
+    const activeCookieVal = cookieStore.get("townly_active_community")?.value;
     const activeCommunityId = activeCookieVal
         ? parseInt(activeCookieVal)
         : (memberships[0]?.communityId ?? dbUser?.communityId);

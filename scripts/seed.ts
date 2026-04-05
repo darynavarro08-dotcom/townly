@@ -100,8 +100,8 @@ async function main() {
         {
             communityId: community.id,
             authorId: sarah.id,
-            title: 'Welcome to Quorify — Your community now has a home.',
-            body: 'We\'re excited to announce that Maplewood HOA is now on Quorify. Use this platform to stay informed about announcements, vote on community decisions, and report issues. Your board is committed to making our community better together.',
+            title: 'Welcome to Townly — Your community now has a home.',
+            body: 'We\'re excited to announce that Maplewood HOA is now on Townly. Use this platform to stay informed about announcements, vote on community decisions, and report issues. Your board is committed to making our community better together.',
             createdAt: new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000),
         },
     ]);
