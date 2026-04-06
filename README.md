@@ -1,46 +1,233 @@
-# Townly 🏘️
-### The AI-powered operating system for HOAs and community associations
+# 🏘️ Townly — Autonomous Community Operating System
 
-> **Built for Z.ai Builder Series · Build with GLM 5.1 · April 2026**
+Townly is an AI-powered system that doesn't just manage communities — it actively runs them.
 
-[![GLM 5.1](https://img.shields.io/badge/Powered%20by-GLM%205.1-blue)](https://z.ai)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-townly.vercel.app-green)](#)
+**Townly operates in autonomous mode — continuously detecting issues, planning responses, and executing actions without requiring user input.**
 
-## What is Townly?
+Built for Z.ai Builder Series · Build with GLM 5.1 · April 2026
+Powered by GLM 5.1
 
-Townly is the all-in-one platform for communities — HOAs, apartment complexes, clubs, and neighborhood groups. One place for governance, communication, and operations, with **GLM 5.1 as the AI brain that runs it with you**.
+---
 
-## GLM 5.1 Integration
+## 🌍 The Problem
 
-GLM 5.1 knows your community specifically — bylaws, dues, votes, open issues. 
+Communities — HOAs, apartment complexes, clubs, and local groups — are still run manually.
 
-**Example:**
-- Resident: "Can I paint my door red?"
-- Townly AI: "Per Section 4.2 of your bylaws, exterior colors require ARC approval. Red is not on the approved list. Want me to draft a variance request?"
+This leads to:
 
-## Features
-- AI Assistant powered by GLM 5.1
-- Announcements & bulletin board
-- Secure voting with quorum tracking
-- Dues collection via Stripe
-- Document vault
-- Event management
-- Maintenance tracker
-- Member directory
+* Low participation in decisions
+* Missed payments and financial inefficiencies
+* Poor communication across members
+* Administrative overload for volunteers
+* Slow and inconsistent decision-making
 
-## Tech Stack
-- Next.js 14 + TypeScript
-- PostgreSQL + Drizzle ORM
-- GLM 5.1 (Z.ai)
-- Stripe
-- Vercel
+Despite having tools, **coordination remains broken**.
 
-## Getting Started
-```bash
+---
+
+## 🎯 Who Is This For?
+
+* Homeowners Associations (HOAs)
+* Apartment communities
+* Tenant unions
+* Clubs and local organizations
+
+👉 Anyone managing a group of people with shared rules, decisions, and responsibilities.
+
+---
+
+## 💡 The Solution
+
+Townly replaces manual coordination with an **autonomous AI agent system** that:
+
+* Monitors the state of a community in real time
+* Identifies issues before they escalate
+* Plans multi-step solutions
+* Executes actions automatically
+
+From governance to payments, Townly continuously improves community health.
+
+---
+
+## ⚙️ How Townly Works
+
+Townly is built as an **autonomous AI agent powered by GLM 5.1**:
+
+### 1. Observe
+
+* Tracks votes, dues, events, maintenance issues, and member activity
+* Maintains real-time awareness of the community state
+
+### 2. Reason (GLM 5.1)
+
+* Detects issues (low participation, unpaid dues, conflicts)
+* Interprets bylaws with context awareness
+* Plans multi-step actions
+* Prioritizes actions based on impact
+
+### 3. Act
+
+* Sends personalized reminders
+* Creates polls and events
+* Executes admin commands
+* Responds to residents with cited answers
+* Triggers workflows automatically
+
+---
+
+## ⚡ Autonomous Mode
+
+Townly doesn’t wait for commands.
+
+It continuously monitors your community and takes action:
+
+* Detects low engagement → sends targeted reminders
+* Identifies unpaid dues → follows up automatically
+* Tracks quorum risk → suggests or executes interventions
+* Surfaces critical insights to admins
+
+All without manual coordination.
+
+---
+
+## 🔁 Example Workflows
+
+### 📌 Bylaw Interpretation (Resident Query)
+
+**Input:**
+“Can I paint my door red?”
+
+**System Behavior:**
+
+1. Retrieves relevant bylaws
+2. Interprets constraints using GLM 5.1
+3. Generates a cited answer
+4. Suggests next actions
+
+---
+
+### 📌 Autonomous Engagement Recovery
+
+**Scenario:** Low voting participation detected
+
+**Townly Agent:**
+
+1. Detects quorum risk
+2. Identifies inactive members
+3. Generates personalized reminders
+4. Sends notifications
+5. Suggests extending the voting deadline
+
+👉 No manual intervention required
+
+---
+
+### 📌 Action Execution
+
+**Input:**
+“Schedule a block party for March 15 at 2pm”
+
+**Townly Agent:**
+
+1. Creates event
+2. Notifies members
+3. Adds to calendar
+4. Tracks RSVPs
+
+---
+
+## 🧠 How We Use GLM 5.1
+
+GLM 5.1 is the **reasoning engine** behind Townly.
+
+It enables:
+
+* Long-horizon reasoning across community state
+* Multi-step planning and execution
+* Context-aware interpretation of bylaws
+* Autonomous decision-making
+* Tool orchestration (calendar, payments, notifications)
+
+This transforms Townly from a passive assistant into an **autonomous system**.
+
+---
+
+## 🏗️ System Architecture
+
+```
+User / Community Events
+        ↓
+   AI Agent (GLM 5.1)
+        ↓
+ Planner → Memory → Tools
+        ↓
+ Execution Layer
+        ↓
+ Community Actions
+```
+
+---
+
+## 📊 Community Health Intelligence
+
+Townly continuously evaluates the state of the community.
+
+Example:
+
+> “Engagement dropped 32% this week. 14 members haven’t voted.
+> I’ve sent reminders and recommend extending the deadline.”
+
+---
+
+## 🌍 Real-World Impact
+
+Townly transforms how communities operate:
+
+* Increases participation in decisions
+* Reduces administrative burden
+* Improves financial compliance (dues collection)
+* Enables faster, more transparent governance
+* Creates more connected and functional communities
+
+👉 From reactive management → to proactive, intelligent coordination
+
+---
+
+## 🧩 Features
+
+* AI Assistant powered by GLM 5.1
+* Secure voting with quorum tracking
+* Dues collection via Stripe
+* Maintenance tracking
+* Event management
+* Document vault
+* Member directory
+
+---
+
+## 🛠️ Tech Stack
+
+* Next.js 14 + TypeScript
+* PostgreSQL + Drizzle ORM
+* GLM 5.1 (Z.ai)
+* Stripe
+* Vercel
+
+---
+
+## 🚀 Getting Started
+
+```
 npm install
 cp .env.example .env.local
-# Add GLM_API_KEY to .env.local
+# Add GLM_API_KEY
 npm run dev
 ```
 
-## Built for Z.ai Builder Series · #buildwithGLM @cara_catowner
+---
+
+## 🏁 Built for
+
+Z.ai Builder Series · #buildwithGLM
+@cara_catowner
+
