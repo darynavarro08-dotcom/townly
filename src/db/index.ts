@@ -6,13 +6,12 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
 
+// Check if DATABASE_URL is available
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://localhost:5432/townly';
+
 // Next.js guarantees process.env is populated before any module code runs
 // in the request lifecycle. We initialize once at module load time.
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-    throw new Error('DATABASE_URL environment variable is not set');
-}
+const connectionString = databaseUrl;
 
 const client = postgres(connectionString, {
     max: 5,
